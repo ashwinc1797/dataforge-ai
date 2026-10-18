@@ -96,31 +96,11 @@ export default function Generator() {
 
   const handleExport = async (format: string) => {
     if (!jobData?.job_id) return;
-    
     try {
-      // For real download, we can use fetch and create object URL, or simply window.location
-      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
-      const url = `${baseUrl}/export/`;
-      
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ job_id: jobData.job_id, format })
-      });
-      
-      if (!response.ok) throw new Error("Export failed");
-      
-      const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = `dataset_${jobData.job_id}.${format === 'excel' ? 'xlsx' : format === 'sqlite' ? 'db' : format === 'json' || format === 'parquet' || format === 'csv' ? format === 'csv' && jobData.tables_generated.length > 1 ? 'zip' : format : 'sql'}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      await DatasetAPI.exportData(jobData.job_id, format, jobData.tables_generated?.length || 1);
     } catch (error) {
       console.error("Export error", error);
-      alert("Failed to export dataset");
+      alert("Failed to export dataset. Please ensure backend is reachable.");
     }
   };
 

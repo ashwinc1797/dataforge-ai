@@ -95,8 +95,8 @@ export default function Dashboard() {
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-muted-foreground">{ds.time}</p>
-                      <Button variant="ghost" size="sm" className="mt-1 h-7 text-xs">
-                        Download
+                      <Button variant="ghost" size="sm" className="mt-1 h-7 text-xs" onClick={() => navigate('/generator')}>
+                        Open in Generator
                       </Button>
                     </div>
                   </div>
